@@ -24,6 +24,17 @@
         .border-right-sep {
             border-right: 2px solid #888 !important;
         }
+        .exclude-chk:checked {
+            accent-color: #dc3545;
+        }
+        /* Fallback for browsers not supporting accent-color */
+        .exclude-chk.red-bg {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+        .text-center {
+            text-align: center !important;
+        }
         </style>
         <div class="row mb-3 align-items-center">
             <div class="col-12">
@@ -55,17 +66,17 @@
         <table id="supportTable" class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th>1人目</th>
-                    <th>2人目</th>
-                    <th>3人目</th>
-                    <th>4人目</th>
+                    <th class="text-center">1人目</th>
+                    <th class="text-center">2人目</th>
+                    <th class="text-center">3人目</th>
+                    <th class="text-center">4人目</th>
                 </tr>
             </thead>
             <tbody>
                 {% for group in results %}
                 <tr>
                     {% for name in group %}
-                    <td>{{ name }}</td>
+                    <td class="text-center">{{ name }}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -104,7 +115,7 @@
                 }
                 row.append(`<td class=\"text-center border-left-sep\" style=\"width:60px;\"><input type=\"checkbox\" class=\"form-check-input include-chk\" data-name=\"${name}\"></td>`);
                 row.append(`<td class=\"text-center\" style=\"width:60px;\"><input type=\"checkbox\" class=\"form-check-input exclude-chk\" data-name=\"${name}\"></td>`);
-                row.append(`<td class=\"border-right-sep\" style=\"width:100px;\">${name}</td>`);
+                row.append(`<td class=\"border-right-sep text-center\" style=\"width:100px;\">${name}</td>`);
                 colCount++;
             });
             if (colCount > 0) tbody.append(row);
@@ -205,6 +216,15 @@
                 renderUsedChars();
                 renderCharTable();
                 table.draw();
+            });
+
+            // ×列のチェックボックスに赤色を適用（fallback for browsers not supporting accent-color）
+            $('#filter-char-table').on('change', '.exclude-chk', function() {
+                if (this.checked) {
+                    $(this).addClass('red-bg');
+                } else {
+                    $(this).removeClass('red-bg');
+                }
             });
         });
     </script>
