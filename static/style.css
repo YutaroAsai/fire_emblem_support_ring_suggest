@@ -6,7 +6,20 @@ body {
     padding: 0;
 }
 
-.container {
+/* ページ固有のスタイル（Bootstrapとの競合を避けるため具体的なセレクタを使用） */
+
+/* 4人支援ページ専用スタイル */
+.support-page {
+    background-color: #e0f7fa;
+}
+
+.support-page body {
+    font-family: "Helvetica Neue", sans-serif;
+    color: #333;
+}
+
+/* form.html用のスタイル（Bootstrapのcontainerクラスと競合しないよう限定） */
+.form-container {
     max-width: 600px;
     margin: 50px auto;
     background-color: #ffffff;
@@ -15,29 +28,30 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
+.form-container h1, 
+.form-container h2 {
     color: #00796b; /* 深めの青緑 */
     text-align: center;
 }
 
-form {
+.form-container form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-label {
+.form-container label {
     font-weight: bold;
 }
 
-input[type="number"] {
+.form-container input[type="number"] {
     padding: 10px;
     border: 1px solid #b2ebf2;
     border-radius: 5px;
     font-size: 1rem;
 }
 
-button {
+.form-container button {
     background-color: #4dd0e1;
     color: white;
     padding: 10px;
@@ -48,13 +62,49 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.form-container button:hover {
     background-color: #26c6da;
 }
 
-.result {
+.form-container .result {
     margin-top: 20px;
     background-color: #b2ebf2;
     padding: 15px;
     border-radius: 5px;
+}
+
+/* 4人支援ページ用スタイル */
+.support-page th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.support-page .border-left-sep {
+    border-left: 2px solid #888;
+}
+
+.support-page .border-right-sep {
+    border-right: 2px solid #888;
+}
+
+.support-page .exclude-chk:checked {
+    accent-color: #dc3545;
+}
+
+/* Fallback for browsers not supporting accent-color */
+.support-page .exclude-chk.red-bg {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.support-page .text-center {
+    text-align: center;
+}
+
+.support-page .filter-col-width {
+    width: 30px;
+}
+
+.support-page .filter-name-width {
+    width: 100px;
 }
