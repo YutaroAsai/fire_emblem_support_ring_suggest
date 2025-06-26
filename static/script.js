@@ -1,31 +1,28 @@
 // 4人支援ページ用スクリプト
-const allNames = [
-    "イサドラ","ウィル","ヴァイダ","エリウッド","エルク","オズイン","カアラ","カナス","カレル","ギィ","ガイツ","ケント","ジャファル","セイン","セーラ","ダーツ","ドルカス","ニノ","ニニアン","バアトル","ハーケン","パント","ヒース","ファリナ","フィオーラ","フロリーナ","プリシラ","ヘクトル","ホークアイ","マーカス","マシュー","マリナス","ラガルト","ラス","リン","レイヴァン","レナート","レベッカ","ルイーズ","ルセア","ロウエン","ワレス"
-];
 let includeFilters = [];
 let excludeFilters = [];
 let usedChars = [];
 
-// キャラ一覧テーブル生成（1行に5セット横並び、キャラ名の左に縦線）
-function renderCharTable() {
-    const tbody = $('#filter-char-table tbody');
-    tbody.empty();
-    const setPerRow = 5; // 1行に5セット
-    let row = $('<tr></tr>');
-    let colCount = 0;
-    allNames.forEach(name => {
-        if (usedChars.includes(name)) return;
-        if (colCount === setPerRow) {
-            tbody.append(row);
-            row = $('<tr></tr>');
-            colCount = 0;
+// 使用済みキャラを除外してテーブルを更新
+function updateCharTableVisibility() {
+    $('#filter-char-table tbody tr').each(function() {
+        const row = $(this);
+        let hasUsedChar = false;
+        
+        row.find('input[data-name]').each(function() {
+            const charName = $(this).data('name');
+            if (usedChars.includes(charName)) {
+                hasUsedChar = true;
+                return false; // break
+            }
+        });
+        
+        if (hasUsedChar) {
+            row.hide();
+        } else {
+            row.show();
         }
-        row.append(`<td class="text-center border-left-sep" style="width:30px;"><input type="checkbox" class="form-check-input include-chk" data-name="${name}"></td>`);
-        row.append(`<td class="text-center" style="width:30px;"><input type="checkbox" class="form-check-input exclude-chk" data-name="${name}"></td>`);
-        row.append(`<td class="border-right-sep text-center" style="width:100px;">${name}</td>`);
-        colCount++;
     });
-    if (colCount > 0) tbody.append(row);
 }
 
 // チェックボックス状態からフィルタ配列を更新
@@ -83,7 +80,6 @@ $.fn.dataTable.ext.search.push(function (settings, data) {
 
 // ページ読み込み時の初期化
 $(document).ready(function () {
-    renderCharTable();
     renderUsedChars();
     renderTags();
 
@@ -114,7 +110,7 @@ $(document).ready(function () {
             if (!usedChars.includes(name)) usedChars.push(name);
         });
         renderUsedChars();
-        renderCharTable();
+        updateCharTableVisibility();
         table.draw();
     });
 
@@ -122,7 +118,7 @@ $(document).ready(function () {
     $('#reset-used-chars').on('click', function () {
         usedChars = [];
         renderUsedChars();
-        renderCharTable();
+        updateCharTableVisibility();
         table.draw();
     });
 

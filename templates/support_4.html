@@ -27,7 +27,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- キャラ一覧をJSで生成 -->
+                        <!-- Pythonで生成したキャラ一覧 -->
+                        {% for i in range(0, characters|length, 5) %}
+                        <tr>
+                            {% for j in range(5) %}
+                                {% if i + j < characters|length %}
+                                <td class="text-center border-left-sep filter-col-width">
+                                    <input type="checkbox" class="form-check-input include-chk" data-name="{{ characters[i + j] }}">
+                                </td>
+                                <td class="text-center filter-col-width">
+                                    <input type="checkbox" class="form-check-input exclude-chk" data-name="{{ characters[i + j] }}">
+                                </td>
+                                <td class="border-right-sep text-center filter-name-width">{{ characters[i + j] }}</td>
+                                {% else %}
+                                <!-- 空のセルで埋める -->
+                                <td class="border-left-sep filter-col-width"></td>
+                                <td class="filter-col-width"></td>
+                                <td class="border-right-sep filter-name-width"></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
