@@ -12,116 +12,32 @@
     <div class="container py-5">
         <h1 class="text-center mb-4">4人支援 組み合わせリスト</h1>
 
-        <!-- 含む -->
+        <!-- 検索条件（1行に5セット横並び） -->
         <div class="row mb-3 align-items-center">
-            <div class="col-md-4">
-                <select id="filter-include-select" class="form-select">
-                    <option value="" disabled selected>キャラを選んでください</option>
-                    <option>イサドラ</option>
-                    <option>ウィル</option>
-                    <option>ヴァイダ</option>
-                    <option>エリウッド</option>
-                    <option>エルク</option>
-                    <option>オズイン</option>
-                    <option>カアラ</option>
-                    <option>カナス</option>
-                    <option>カレル</option>
-                    <option>ギィ</option>
-                    <option>ガイツ</option>
-                    <option>ケント</option>
-                    <option>ジャファル</option>
-                    <option>セイン</option>
-                    <option>セーラ</option>
-                    <option>ダーツ</option>
-                    <option>ドルカス</option>
-                    <option>ニノ</option>
-                    <option>ニニアン</option>
-                    <option>バアトル</option>
-                    <option>ハーケン</option>
-                    <option>パント</option>
-                    <option>ヒース</option>
-                    <option>ファリナ</option>
-                    <option>フィオーラ</option>
-                    <option>フロリーナ</option>
-                    <option>プリシラ</option>
-                    <option>ヘクトル</option>
-                    <option>ホークアイ</option>
-                    <option>マーカス</option>
-                    <option>マシュー</option>
-                    <option>マリナス</option>
-                    <option>ラガルト</option>
-                    <option>ラス</option>
-                    <option>リン</option>
-                    <option>レイヴァン</option>
-                    <option>レナート</option>
-                    <option>レベッカ</option>
-                    <option>ルイーズ</option>
-                    <option>ルセア</option>
-                    <option>ロウエン</option>
-                    <option>ワレス</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <span class="fw-bold">を含む</span>
+            <div class="col-12">
+                <table class="table table-sm table-bordered mb-0" id="filter-char-table">
+                    <thead class="table-light">
+                        <tr>
+                            {% for i in range(5) %}
+                            <th style="width: 60px;">含む</th>
+                            <th style="width: 60px;">含まない</th>
+                            <th style="width: 100px;">キャラ名</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- キャラ一覧をJSで生成 -->
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <!-- 含まない -->
-        <div class="row mb-3 align-items-center">
-            <div class="col-md-4">
-                <select id="filter-exclude-select" class="form-select">
-                    <option value="" disabled selected>キャラを選んでください</option>
-                    <option>イサドラ</option>
-                    <option>ウィル</option>
-                    <option>ヴァイダ</option>
-                    <option>エリウッド</option>
-                    <option>エルク</option>
-                    <option>オズイン</option>
-                    <option>カアラ</option>
-                    <option>カナス</option>
-                    <option>カレル</option>
-                    <option>ギィ</option>
-                    <option>ガイツ</option>
-                    <option>ケント</option>
-                    <option>ジャファル</option>
-                    <option>セイン</option>
-                    <option>セーラ</option>
-                    <option>ダーツ</option>
-                    <option>ドルカス</option>
-                    <option>ニノ</option>
-                    <option>ニニアン</option>
-                    <option>バアトル</option>
-                    <option>ハーケン</option>
-                    <option>パント</option>
-                    <option>ヒース</option>
-                    <option>ファリナ</option>
-                    <option>フィオーラ</option>
-                    <option>フロリーナ</option>
-                    <option>プリシラ</option>
-                    <option>ヘクトル</option>
-                    <option>ホークアイ</option>
-                    <option>マーカス</option>
-                    <option>マシュー</option>
-                    <option>マリナス</option>
-                    <option>ラガルト</option>
-                    <option>ラス</option>
-                    <option>リン</option>
-                    <option>レイヴァン</option>
-                    <option>レナート</option>
-                    <option>レベッカ</option>
-                    <option>ルイーズ</option>
-                    <option>ルセア</option>
-                    <option>ロウエン</option>
-                    <option>ワレス</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <span class="fw-bold">を含まない</span>
-            </div>
-        </div>
-
         <div class="mb-4" id="filter-tags">
             <!-- 選んだキャラがここに表示される -->
+        </div>
+        <div class="mb-4" id="used-chars-area">
+            <span class="fw-bold">使用済みキャラ：</span>
+            <span id="used-chars-list"></span>
+            <button id="reset-used-chars" class="btn btn-sm btn-outline-secondary ms-2">リセット</button>
         </div>
 
         <table id="supportTable" class="table table-striped table-bordered">
@@ -153,86 +69,130 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
-        const includeFilters = [];
-        const excludeFilters = [];
+        const allNames = [
+            "イサドラ","ウィル","ヴァイダ","エリウッド","エルク","オズイン","カアラ","カナス","カレル","ギィ","ガイツ","ケント","ジャファル","セイン","セーラ","ダーツ","ドルカス","ニノ","ニニアン","バアトル","ハーケン","パント","ヒース","ファリナ","フィオーラ","フロリーナ","プリシラ","ヘクトル","ホークアイ","マーカス","マシュー","マリナス","ラガルト","ラス","リン","レイヴァン","レナート","レベッカ","ルイーズ","ルセア","ロウエン","ワレス"
+        ];
+        let includeFilters = [];
+        let excludeFilters = [];
+        let usedChars = [];
 
+        // キャラ一覧テーブル生成（1行に5セット横並び、枠線なし）
+        function renderCharTable() {
+            const tbody = $('#filter-char-table tbody');
+            tbody.empty();
+            const setPerRow = 5; // 1行に5セット
+            let row = $('<tr></tr>');
+            let colCount = 0;
+            allNames.forEach(name => {
+                if (usedChars.includes(name)) return;
+                if (colCount === setPerRow) {
+                    tbody.append(row);
+                    row = $('<tr></tr>');
+                    colCount = 0;
+                }
+                row.append(`<td class=\"text-center\" style=\"width:60px;\"><input type=\"checkbox\" class=\"form-check-input include-chk\" data-name=\"${name}\"></td>`);
+                row.append(`<td class=\"text-center\" style=\"width:60px;\"><input type=\"checkbox\" class=\"form-check-input exclude-chk\" data-name=\"${name}\"></td>`);
+                row.append(`<td style=\"width:100px;\">${name}</td>`);
+                colCount++;
+            });
+            if (colCount > 0) tbody.append(row);
+        }
+
+        // チェックボックス状態からフィルタ配列を更新
+        function updateFiltersFromCheckbox() {
+            includeFilters = [];
+            excludeFilters = [];
+            $('#filter-char-table .include-chk:checked').each(function() {
+                includeFilters.push($(this).data('name'));
+            });
+            $('#filter-char-table .exclude-chk:checked').each(function() {
+                excludeFilters.push($(this).data('name'));
+            });
+            renderTags();
+            $('#supportTable').DataTable().draw();
+        }
+
+        // タグ表示
         function renderTags() {
             const container = $('#filter-tags');
             container.empty();
-
-            // 含む（青）
             includeFilters.forEach((name, idx) => {
-                const tag = $(`
-              <span class="badge bg-primary me-2">
-                ${name}
-                <button type="button" class="btn-close btn-close-white btn-sm ms-1" data-type="include" data-index="${idx}"></button>
-              </span>
-            `);
+                const tag = $(`<span class="badge bg-primary me-2">${name}（含む）</span>`);
                 container.append(tag);
             });
-
-            // 含まない（赤）
             excludeFilters.forEach((name, idx) => {
-                const tag = $(`
-              <span class="badge bg-danger me-2">
-                ${name}
-                <button type="button" class="btn-close btn-close-white btn-sm ms-1" data-type="exclude" data-index="${idx}"></button>
-              </span>
-            `);
+                const tag = $(`<span class="badge bg-danger me-2">${name}（除外）</span>`);
                 container.append(tag);
             });
+        }
 
-            // 削除ボタン処理
-            $('.btn-close').click(function () {
-                const type = $(this).data('type');
-                const idx = $(this).data('index');
-                if (type === 'include') includeFilters.splice(idx, 1);
-                if (type === 'exclude') excludeFilters.splice(idx, 1);
-                renderTags();
-                $('#supportTable').DataTable().draw();
-            });
+        function renderUsedChars() {
+            const list = $('#used-chars-list');
+            list.empty();
+            if (usedChars.length === 0) {
+                list.text('なし');
+            } else {
+                usedChars.forEach((name, idx) => {
+                    const tag = $(`<span class="badge bg-secondary me-1">${name}</span>`);
+                    list.append(tag);
+                });
+            }
         }
 
         // DataTables カスタムフィルター関数
         $.fn.dataTable.ext.search.push(function (settings, data) {
             const rowText = data.join(" ");
-
-            // AND検索: 含むキャラすべてを含んでいるか
+            // 含むキャラすべてを含んでいるか
             if (!includeFilters.every(name => rowText.includes(name))) return false;
-
             // 含まないキャラが1人でも含まれていたら非表示
             if (excludeFilters.some(name => rowText.includes(name))) return false;
-
+            // 使用済みキャラが1人でも含まれていたら非表示
+            if (usedChars.some(name => rowText.includes(name))) return false;
             return true;
         });
 
         $(document).ready(function () {
+            renderCharTable();
+            renderUsedChars();
+            renderTags();
+
             const table = $('#supportTable').DataTable({
                 language: {
                     url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/ja.json"
                 }
             });
 
-            // 含むプルダウン
-            $('#filter-include-select').on('change', function () {
-                const name = $(this).val();
-                if (name && !includeFilters.includes(name)) {
-                    includeFilters.push(name);
-                    renderTags();
-                    table.draw();
+            // チェックボックス変更
+            $('#filter-char-table').on('change', '.include-chk, .exclude-chk', function() {
+                // 片方チェック時はもう片方を外す
+                const name = $(this).data('name');
+                if ($(this).hasClass('include-chk') && $(this).is(':checked')) {
+                    $(`.exclude-chk[data-name='${name}']`).prop('checked', false);
                 }
-                $(this).val(""); // リセット
+                if ($(this).hasClass('exclude-chk') && $(this).is(':checked')) {
+                    $(`.include-chk[data-name='${name}']`).prop('checked', false);
+                }
+                updateFiltersFromCheckbox();
             });
 
-            // 含まないプルダウン
-            $('#filter-exclude-select').on('change', function () {
-                const name = $(this).val();
-                if (name && !excludeFilters.includes(name)) {
-                    excludeFilters.push(name);
-                    renderTags();
-                    table.draw();
-                }
-                $(this).val(""); // リセット
+            // テーブル行クリックで使用済みキャラ追加
+            $('#supportTable tbody').on('click', 'tr', function () {
+                const rowData = table.row(this).data();
+                if (!rowData) return;
+                rowData.forEach(name => {
+                    if (!usedChars.includes(name)) usedChars.push(name);
+                });
+                renderUsedChars();
+                renderCharTable();
+                table.draw();
+            });
+
+            // リセットボタン
+            $('#reset-used-chars').on('click', function () {
+                usedChars = [];
+                renderUsedChars();
+                renderCharTable();
+                table.draw();
             });
         });
     </script>

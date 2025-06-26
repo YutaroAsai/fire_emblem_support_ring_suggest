@@ -22,14 +22,14 @@ def index():
 
 @app.route("/support-4")
 def support_4():
-    filepath = os.path.join("data", "support_4.csv")
+    filepath = os.path.join(os.path.dirname(__file__), "data", "support_4.csv")
     support_4_list = load_support_data(filepath)
     return render_template("support_4.html", results=support_4_list)
 
 
 @app.route("/support-6")
 def support_6():
-    filepath = os.path.join("data", "support_6.csv")
+    filepath = os.path.join(os.path.dirname(__file__), "data", "support_6.csv")
     support_6_list = load_support_data(filepath)
     return render_template("support_6.html", results=support_6_list)
 
