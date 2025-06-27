@@ -121,6 +121,17 @@ body {
     font-size: 0.9rem;
 }
 
+/* 使用済みキャラのグレーアウト表示 */
+.support-page .used-character {
+    opacity: 0.4;
+    color: #c0cbd4;
+    background-color: #42464a;
+}
+
+.support-page .used-character input {
+    pointer-events: none;
+}
+
 /* レスポンシブなフォントサイズ調整 */
 @media (max-width: 1200px) {
     .support-page .filter-name-width {

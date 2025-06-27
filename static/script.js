@@ -2,25 +2,39 @@
 let includeFilters = [];
 let excludeFilters = [];
 let usedChars = [];
+let usedCombinations = []; // 選択済み組み合わせを管理
 
 // 使用済みキャラを除外してテーブルを更新
 function updateCharTableVisibility() {
     $('#filter-char-table tbody tr').each(function() {
         const row = $(this);
-        let hasUsedChar = false;
         
-        row.find('input[data-name]').each(function() {
-            const charName = $(this).data('name');
-            if (usedChars.includes(charName)) {
-                hasUsedChar = true;
-                return false; // break
+        // 各行のセル（3セット分）をチェック
+        for (let i = 0; i < 6; i++) {
+            const includeCell = row.find(`td:nth-child(${i * 3 + 1})`);
+            const excludeCell = row.find(`td:nth-child(${i * 3 + 2})`);
+            const nameCell = row.find(`td:nth-child(${i * 3 + 3})`);
+            
+            const charName = includeCell.find('input').data('name');
+            if (charName && usedChars.includes(charName)) {
+                // 使用済みキャラのセルをグレーアウト
+                includeCell.addClass('used-character');
+                excludeCell.addClass('used-character');
+                nameCell.addClass('used-character');
+                
+                // チェックボックスを非活性化
+                includeCell.find('input').prop('disabled', true);
+                excludeCell.find('input').prop('disabled', true);
+            } else if (charName) {
+                // 使用されていないキャラのセルを通常表示
+                includeCell.removeClass('used-character');
+                excludeCell.removeClass('used-character');
+                nameCell.removeClass('used-character');
+                
+                // チェックボックスを活性化
+                includeCell.find('input').prop('disabled', false);
+                excludeCell.find('input').prop('disabled', false);
             }
-        });
-        
-        if (hasUsedChar) {
-            row.hide();
-        } else {
-            row.show();
         }
     });
 }
@@ -53,15 +67,23 @@ function renderTags() {
     });
 }
 
-function renderUsedChars() {
-    const list = $('#used-chars-list');
-    list.empty();
-    if (usedChars.length === 0) {
-        list.text('なし');
+function renderUsedCombinations() {
+    const container = $('#used-combinations-list');
+    container.empty();
+    if (usedCombinations.length === 0) {
+        container.html('<span class="text-muted">なし</span>');
     } else {
-        usedChars.forEach((name, idx) => {
-            const tag = $(`<span class="badge bg-secondary me-1">${name}</span>`);
-            list.append(tag);
+        usedCombinations.forEach((combination, idx) => {
+            const combinationDiv = $(`
+                <div class="mb-1 p-2 border rounded">
+                    <div class="d-flex flex-wrap gap-1 align-items-center">
+                        ${combination.map(name => `<span class="badge bg-secondary">${name}</span>`).join('')}
+                        <button type="button" class="btn-close ms-1" 
+                                data-combination-index="${idx}" aria-label="削除"></button>
+                    </div>
+                </div>
+            `);
+            container.append(combinationDiv);
         });
     }
 }
@@ -80,7 +102,7 @@ $.fn.dataTable.ext.search.push(function (settings, data) {
 
 // ページ読み込み時の初期化
 $(document).ready(function () {
-    renderUsedChars();
+    renderUsedCombinations();
     renderTags();
 
     const table = $('#supportTable').DataTable({
@@ -107,10 +129,16 @@ $(document).ready(function () {
     $('#supportTable tbody').on('click', 'tr', function () {
         const rowData = table.row(this).data();
         if (!rowData) return;
+        
+        // 組み合わせとして追加
+        usedCombinations.push([...rowData]);
+        
+        // 使用済みキャラリストを更新
         rowData.forEach(name => {
             if (!usedChars.includes(name)) usedChars.push(name);
         });
-        renderUsedChars();
+        
+        renderUsedCombinations();
         updateCharTableVisibility();
         table.draw();
     });
@@ -118,7 +146,29 @@ $(document).ready(function () {
     // リセットボタン
     $('#reset-used-chars').on('click', function () {
         usedChars = [];
-        renderUsedChars();
+        usedCombinations = [];
+        renderUsedCombinations();
+        updateCharTableVisibility();
+        table.draw();
+    });
+
+    // 個別組み合わせ削除ボタン
+    $('#used-combinations-list').on('click', '.btn-close', function() {
+        const index = $(this).data('combination-index');
+        const combination = usedCombinations[index];
+        
+        // 組み合わせを削除
+        usedCombinations.splice(index, 1);
+        
+        // 使用済みキャラリストを再構築
+        usedChars = [];
+        usedCombinations.forEach(combo => {
+            combo.forEach(name => {
+                if (!usedChars.includes(name)) usedChars.push(name);
+            });
+        });
+        
+        renderUsedCombinations();
         updateCharTableVisibility();
         table.draw();
     });

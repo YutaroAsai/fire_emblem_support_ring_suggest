@@ -10,11 +10,9 @@
 </head>
 
 <body class="bg-light support-page">
-    <div class="container py-5">
-        <h1 class="text-center mb-4">4人支援 組み合わせリスト</h1>
-
+    <div class="container py-3">
         <!-- 検索条件（1行に6セット横並び） -->
-        <div class="row mb-3 align-items-center">
+        <div class="row mb-2 align-items-center">
             <div class="col-12">
                 <table class="table table-sm table-bordered mb-0" id="filter-char-table">
                     <thead class="table-light">
@@ -52,13 +50,19 @@
                 </table>
             </div>
         </div>
-        <div class="mb-4" id="filter-tags">
+        <div class="mb-2" id="filter-tags">
             <!-- 選んだキャラがここに表示される -->
         </div>
-        <div class="mb-4" id="used-chars-area">
-            <span class="fw-bold">使用済みキャラ：</span>
-            <span id="used-chars-list"></span>
-            <button id="reset-used-chars" class="btn btn-sm btn-outline-secondary ms-2">リセット</button>
+        <div class="mb-2" id="used-chars-area">
+            <div class="border rounded p-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-bold">選択済みの組み合わせ：</span>
+                    <button id="reset-used-chars" class="btn btn-sm btn-outline-secondary">リセット</button>
+                </div>
+                <div id="used-combinations-list">
+                    <!-- 選択済み組み合わせがここに表示される -->
+                </div>
+            </div>
         </div>
 
         <table id="supportTable" class="table table-striped table-bordered">
