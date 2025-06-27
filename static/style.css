@@ -121,6 +121,10 @@ body {
     font-size: 0.9rem;
 }
 
+.support-page #filter-section {
+    border: 2px solid #888;
+}
+
 .support-page #used-chars-area {
     border: 2px solid #888;
 }

@@ -173,6 +173,35 @@ $(document).ready(function () {
         table.draw();
     });
 
+    // 検索条件エリアの折りたたみ機能
+    $('#filter-header').on('click', function() {
+        const content = $('#filter-content');
+        const icon = $('#filter-toggle-icon');
+        
+        if (content.is(':visible')) {
+            content.slideUp(200);
+            icon.text('▶');
+        } else {
+            content.slideDown(200);
+            icon.text('▼');
+        }
+    });
+
+    // リサイズ機能
+    $('#filter-resize-container').on('mouseup', function() {
+        // リサイズ終了時に高さを保存
+        const height = $(this).height();
+        localStorage.setItem('filterResizeContainerHeight', height);
+    });
+
+    // ページ読み込み時に保存された高さを復元
+    $(document).ready(function() {
+        const savedHeight = localStorage.getItem('filterResizeContainerHeight');
+        if (savedHeight) {
+            $('#filter-resize-container').height(savedHeight);
+        }
+    });
+
     // ×列のチェックボックスに赤色を適用（fallback for browsers not supporting accent-color）
     $('#filter-char-table').on('change', '.exclude-chk', function() {
         if (this.checked) {
