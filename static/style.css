@@ -115,4 +115,33 @@ body {
 
 .support-page .filter-name-width {
     width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+}
+
+/* レスポンシブなフォントサイズ調整 */
+@media (max-width: 1200px) {
+    .support-page .filter-name-width {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .support-page .filter-name-width {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .support-page .filter-name-width {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .support-page .filter-name-width {
+        font-size: 0.5rem;
+    }
 }

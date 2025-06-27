@@ -13,13 +13,13 @@
     <div class="container py-5">
         <h1 class="text-center mb-4">4人支援 組み合わせリスト</h1>
 
-        <!-- 検索条件（1行に5セット横並び） -->
+        <!-- 検索条件（1行に6セット横並び） -->
         <div class="row mb-3 align-items-center">
             <div class="col-12">
                 <table class="table table-sm table-bordered mb-0" id="filter-char-table">
                     <thead class="table-light">
                         <tr class="border-top-sep">
-                            {% for i in range(5) %}
+                            {% for i in range(6) %}
                             <th class="border-left-sep filter-col-width">⚪︎</th>
                             <th class="filter-col-width">×</th>
                             <th class="border-right-sep filter-name-width">キャラ名</th>
@@ -28,9 +28,9 @@
                     </thead>
                     <tbody>
                         <!-- Pythonで生成したキャラ一覧 -->
-                        {% for i in range(0, characters|length, 5) %}
+                        {% for i in range(0, characters|length, 6) %}
                         <tr class="border-top-sep{% if loop.last %} border-bottom-sep{% endif %}">
-                            {% for j in range(5) %}
+                            {% for j in range(6) %}
                                 {% if i + j < characters|length %}
                                 <td class="text-center border-left-sep filter-col-width">
                                     <input type="checkbox" class="form-check-input include-chk" data-name="{{ characters[i + j] }}">
