@@ -121,6 +121,10 @@ body {
     font-size: 0.9rem;
 }
 
+.support-page #used-chars-area {
+    border: 2px solid #888;
+}
+
 /* 使用済みキャラのグレーアウト表示 */
 .support-page .used-character {
     opacity: 0.4;
