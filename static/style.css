@@ -87,6 +87,14 @@ body {
     border-right: 2px solid #888;
 }
 
+.support-page .border-top-sep {
+    border-top: 2px solid #888;
+}
+
+.support-page .border-bottom-sep {
+    border-bottom: 2px solid #888;
+}
+
 .support-page .exclude-chk:checked {
     accent-color: #dc3545;
 }

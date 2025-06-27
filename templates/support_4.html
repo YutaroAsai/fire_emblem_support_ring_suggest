@@ -18,7 +18,7 @@
             <div class="col-12">
                 <table class="table table-sm table-bordered mb-0" id="filter-char-table">
                     <thead class="table-light">
-                        <tr>
+                        <tr class="border-top-sep">
                             {% for i in range(5) %}
                             <th class="border-left-sep filter-col-width">⚪︎</th>
                             <th class="filter-col-width">×</th>
@@ -29,7 +29,7 @@
                     <tbody>
                         <!-- Pythonで生成したキャラ一覧 -->
                         {% for i in range(0, characters|length, 5) %}
-                        <tr>
+                        <tr class="border-top-sep{% if loop.last %} border-bottom-sep{% endif %}">
                             {% for j in range(5) %}
                                 {% if i + j < characters|length %}
                                 <td class="text-center border-left-sep filter-col-width">

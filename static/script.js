@@ -95,6 +95,7 @@ $(document).ready(function () {
         const name = $(this).data('name');
         if ($(this).hasClass('include-chk') && $(this).is(':checked')) {
             $(`.exclude-chk[data-name='${name}']`).prop('checked', false);
+            $(`.exclude-chk[data-name='${name}']`).removeClass('red-bg');
         }
         if ($(this).hasClass('exclude-chk') && $(this).is(':checked')) {
             $(`.include-chk[data-name='${name}']`).prop('checked', false);
