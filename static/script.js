@@ -136,8 +136,14 @@ $(document).ready(function () {
         // 使用済みキャラリストを更新
         rowData.forEach(name => {
             if (!usedChars.includes(name)) usedChars.push(name);
+            // チェックを外してから不活性化
+            $(`.include-chk[data-name='${name}']`).prop('checked', false);
+            $(`.exclude-chk[data-name='${name}']`).prop('checked', false);
+            // 検索条件からも除外
+            includeFilters = includeFilters.filter(n => n !== name);
+            excludeFilters = excludeFilters.filter(n => n !== name);
         });
-        
+        renderTags();
         renderUsedCombinations();
         updateCharTableVisibility();
         table.draw();
@@ -210,4 +216,19 @@ $(document).ready(function () {
             $(this).removeClass('red-bg');
         }
     });
+});
+
+// 作品・人数セレクトボックスの動的切り替え
+$(function() {
+    if (window.optionsData) {
+        $('#title-select').on('change', function() {
+            const title = $(this).val();
+            const nums = window.optionsData[title];
+            const numSelect = $('#num-select');
+            numSelect.empty();
+            nums.forEach(function(n) {
+                numSelect.append(`<option value="${n}">${n}人</option>`);
+            });
+        });
+    }
 }); 

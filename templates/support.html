@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>4人支援組み合わせ</title>
+    <title>{{ selected_title }} {{ selected_num }}人支援組み合わせ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -11,6 +11,23 @@
 
 <body class="bg-light support-page">
     <div class="container py-3">
+        <div class="d-flex align-items-center mb-3">
+            <form id="select-form" class="d-flex flex-wrap gap-2 align-items-center w-100" method="get" action="/support">
+                <label for="title-select" class="fw-bold me-2 mb-0">作品：</label>
+                <select id="title-select" name="title" class="form-select w-auto">
+                    {% for title in options.keys() %}
+                    <option value="{{ title }}" {% if title == selected_title %}selected{% endif %}>{{ title }}</option>
+                    {% endfor %}
+                </select>
+                <label for="num-select" class="fw-bold ms-3 me-2 mb-0">人数：</label>
+                <select id="num-select" name="num" class="form-select w-auto">
+                    {% for n in options[selected_title] %}
+                    <option value="{{ n }}" {% if n == selected_num %}selected{% endif %}>{{ n }}人</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary ms-3">表示</button>
+            </form>
+        </div>
         <!-- 検索条件（1行に6セット横並び） -->
         <div class="mb-2" id="filter-section">
             <div class="border rounded p-2" id="filter-resize-container" style="min-height: 100px; overflow-y: auto; overflow-x: hidden; resize: vertical; border: 1px solid #dee2e6; border-radius: 0.375rem;">
@@ -78,10 +95,9 @@
         <table id="supportTable" class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th class="text-center">1人目</th>
-                    <th class="text-center">2人目</th>
-                    <th class="text-center">3人目</th>
-                    <th class="text-center">4人目</th>
+                    {% for i in range(selected_num) %}
+                    <th class="text-center">{{ i+1 }}人目</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
@@ -102,6 +118,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        window.optionsData = JSON.parse('{{ options|tojson|safe }}');
+    </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
