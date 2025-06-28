@@ -35,24 +35,28 @@ def load_support_data(filepath):
                 support_list.append(row)
     return support_list
 
-# data配下のファイルから作品名・人数候補を抽出
+# data配下のファイルから人数候補を抽出
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 FILE_PATTERN = re.compile(r"(.+)_支援環リスト_k=(\d+)\.csv")
 
 def get_title_num_options():
-    files = os.listdir(DATA_DIR)
+    # 作品名は固定
+    title_order = ["封印", "烈火", "聖魔"]
     options = {}
-    for fname in files:
-        m = FILE_PATTERN.match(fname)
-        if m:
-            title = m.group(1)
-            num = int(m.group(2))
-            if title not in options:
-                options[title] = []
-            options[title].append(num)
-    # 人数を昇順でソート
-    for title in options:
+    
+    # 各作品の人数を取得
+    for title in title_order:
+        options[title] = []
+        files = os.listdir(DATA_DIR)
+        for fname in files:
+            if fname.startswith(f"{title}_支援環リスト_k="):
+                m = re.search(r"k=(\d+)\.csv", fname)
+                if m:
+                    num = int(m.group(1))
+                    options[title].append(num)
+        # 人数を昇順でソート
         options[title].sort()
+    
     return options
 
 @app.route("/")
