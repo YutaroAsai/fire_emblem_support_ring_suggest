@@ -61,7 +61,7 @@ def get_title_num_options():
 
 @app.route("/")
 def index():
-    return "<p>アクセス先：<a href='/support'>支援環検索</a>"
+    return render_template("index.html")
 
 @app.route("/support")
 def support():
